@@ -7,18 +7,40 @@ import sys
 
 nmsprime_path = '/var/www/nmsprime'
 
-tasks = ['db', 'db_ccc', 'host', 'host_ccc', 'user', 'user_ccc', 'password', 'password_ccc']
+tasks = {
+        'db' : 'DB_DATABASE',
+        'host' : 'DB_HOST',
+        'password' : 'DB_PASSWORD',
+        'user' : 'DB_USERNAME',
+
+        'db_ccc' : 'CCC_DB_DATABASE',
+        'host_ccc' : 'CCC_DB_HOST',
+        'password_ccc' : 'CCC_DB_PASSWORD',
+        'user_ccc' : 'CCC_DB_USERNAME',
+
+        'db_cacti' : 'CACTI_DB_DATABASE',
+        'host_cacti' : 'CACTI_DB_HOST',
+        'password_cacti' : 'CACTI_DB_PASSWORD',
+        'user_cacti' : 'CACTI_DB_USERNAME',
+
+        'db_icinga2' : 'ICINGA2_DB_DATABASE',
+        'host_icinga2' : 'ICINGA2_DB_HOST',
+        'password_icinga2' : 'ICINGA2_DB_PASSWORD',
+        'user_icinga2' : 'ICINGA2_DB_USERNAME',
+}
+mappings = {v: k for k, v in tasks.items()}
+
 envs = ['local', 'global']
 env_path = '/etc/nmsprime/env'
 
 def error():
-    print('Usage: {} [{}] [{}]'.format(sys.argv[0], '|'.join(tasks), '|'.join(envs)))
+    print('Usage: {} [{}] [{}]'.format(sys.argv[0], '|'.join(tasks.keys()), '|'.join(envs)))
     sys.exit(1)
 
 if (len(sys.argv) is not 3):
     error()
 
-if sys.argv[1] not in tasks:
+if sys.argv[1] not in tasks.keys():
     error()
 
 if sys.argv[2] not in envs:
@@ -54,22 +76,10 @@ for line in lines:
     if line.startswith('#'):
         continue
 
+
     parts = line.split('=')
-    if 'DB_DATABASE' == parts[0]:
-        data['db'] = getValue(parts[1])
-    elif 'CCC_DB_DATABASE' == parts[0]:
-        data['db_ccc'] = getValue(parts[1])
-    elif 'DB_HOST' == parts[0]:
-        data['host'] = getValue(parts[1])
-    elif 'CCC_DB_HOST' == parts[0]:
-        data['host_ccc'] = getValue(parts[1])
-    elif 'DB_USERNAME' == parts[0]:
-        data['user'] = getValue(parts[1])
-    elif 'CCC_DB_USERNAME' == parts[0]:
-        data['user_ccc'] = getValue(parts[1])
-    elif 'DB_PASSWORD' == parts[0]:
-        data['password'] = getValue(parts[1])
-    elif 'CCC_DB_PASSWORD' == parts[0]:
-        data['password_ccc'] = getValue(parts[1])
+    key = parts[0].strip()
+    if key in mappings.keys():
+        data[mappings[key]] = getValue(parts[1])
 
 print(data[sys.argv[1]])

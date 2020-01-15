@@ -23,6 +23,10 @@ CCC_USER=$(python $SCRIPT_DIR/nmsprime_get_env.py user_ccc local)
 CCC_PASSWD=$(python $SCRIPT_DIR/nmsprime_get_env.py password_ccc local)
 CCC_DB=$(python $SCRIPT_DIR/nmsprime_get_env.py db_ccc local)
 
+CACTI_USER=$(python $SCRIPT_DIR/nmsprime_get_env.py user_cacti local)
+CACTI_PASSWD=$(python $SCRIPT_DIR/nmsprime_get_env.py password_cacti local)
+CACTI_DB=$(python $SCRIPT_DIR/nmsprime_get_env.py db_cacti local)
+
 # create the dump file in temp directory
 if [[ "$1" == *.sql.bz2 ]]; then
 	CAT_CMD="bzcat $1"
@@ -48,6 +52,9 @@ fi
 if [[ "$1" == *$CCC_DB.sql* ]]; then
 	echo "Restoring database $CCC_DB…"
 	$CAT_CMD | mysql -u $CCC_USER -p$CCC_PASSWD -D $CCC_DB
+elif [[ "$1" == *$CACTI_DB.sql* ]]; then
+	echo "Restoring database $CACTI_DB…"
+	$CAT_CMD | mysql -u $CACTI_USER -p$CACTI_PASSWD -D $CACTI_DB
 elif [[ "$1" == *$DB.sql* ]]; then
 	echo "Restoring database $DB…"
 	$CAT_CMD | mysql -u $USER -p$PASSWD -D $DB

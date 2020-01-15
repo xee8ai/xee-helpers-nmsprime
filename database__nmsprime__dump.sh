@@ -10,9 +10,19 @@ SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 USER=$(python $SCRIPT_DIR/nmsprime_get_env.py user local)
 PASSWD=$(python $SCRIPT_DIR/nmsprime_get_env.py password local)
 DB=$(python $SCRIPT_DIR/nmsprime_get_env.py db local)
+
 CCC_USER=$(python $SCRIPT_DIR/nmsprime_get_env.py user_ccc local)
 CCC_PASSWD=$(python $SCRIPT_DIR/nmsprime_get_env.py password_ccc local)
 CCC_DB=$(python $SCRIPT_DIR/nmsprime_get_env.py db_ccc local)
+
+CACTI_USER=$(python $SCRIPT_DIR/nmsprime_get_env.py user_cacti local)
+CACTI_PASSWD=$(python $SCRIPT_DIR/nmsprime_get_env.py password_cacti local)
+CACTI_DB=$(python $SCRIPT_DIR/nmsprime_get_env.py db_cacti local)
+
+ICINGA2_USER=$(python $SCRIPT_DIR/nmsprime_get_env.py user_icinga2 local)
+ICINGA2_PASSWD=$(python $SCRIPT_DIR/nmsprime_get_env.py password_icinga2 local)
+ICINGA2_DB=$(python $SCRIPT_DIR/nmsprime_get_env.py db_icinga2 local)
+
 DUMPDIR="/root/db_dumps"
 NMSPRIME_DIR="/var/www/nmsprime"
 
@@ -52,10 +62,14 @@ BRANCH=$(git branch | grep "*" | cut -c 3- | tr '/' '__')
 TIMESTAMP="`date +%Y-%m-%dT%H-%M-%S`"
 PREFIX=$DB
 CCC_PREFIX=$CCC_DB
+CACTI_PREFIX=$CACTI_DB
+ICINGA2_PREFIX=$ICINGA2_DB
 SUFFIX=".sql.bz2"
 
 DUMPFILE="$DUMPDIR"/"$TIMESTAMP"__"$BRANCH$DESC"__"$PREFIX$SUFFIX"
 CCC_DUMPFILE="$DUMPDIR"/"$TIMESTAMP"__"$BRANCH$DESC"__"$CCC_PREFIX$SUFFIX"
+CACTI_DUMPFILE="$DUMPDIR"/"$TIMESTAMP"__"$BRANCH$DESC"__"$CACTI_PREFIX$SUFFIX"
+ICINGA2_DUMPFILE="$DUMPDIR"/"$TIMESTAMP"__"$BRANCH$DESC"__"$ICINGA2_PREFIX$SUFFIX"
 
 # set pipefail to catch errors from each piped command
 set -o pipefail
@@ -65,6 +79,13 @@ mysqldump --opt --add-drop-database --user=$USER --password=$PASSWD --databases 
 
 echo "Dumping database $CCC_DB to $CCC_DUMPFILE…"
 mysqldump --opt --add-drop-database --user=$CCC_USER --password=$CCC_PASSWD --databases $CCC_DB | bzip2 > $CCC_DUMPFILE
+
+echo "Dumping database $CACTI_DB to $CACTI_DUMPFILE…"
+mysqldump --opt --add-drop-database --user=$CACTI_USER --password=$CACTI_PASSWD --databases $CACTI_DB | bzip2 > $CACTI_DUMPFILE
+
+# very huge (and slow)
+# echo "Dumping database $ICINGA2_DB to $ICINGA2_DUMPFILE…"
+# mysqldump --opt --add-drop-database --user=$ICINGA2_USER --password=$ICINGA2_PASSWD --databases $ICINGA2_DB | bzip2 > $ICINGA2_DUMPFILE
 
 echo "Success"
 
