@@ -19,8 +19,14 @@ git fetch -tp
 echo "Done…"
 
 echo
-echo "There are the following tags in this repo"
+echo "There are the following tags in this repo:"
 git tag
+
+echo
+echo "The following subdirs already exists:"
+CMD="ls -l $DST"
+echo $CMD
+$CMD
 
 echo
 read -p "Which RPM version you want to build (e.g. 2.4.1)? " RPMVERSION
