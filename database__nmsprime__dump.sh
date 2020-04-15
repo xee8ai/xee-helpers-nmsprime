@@ -57,7 +57,11 @@ fi
 
 # get the branch name to add it to dumpfile name
 cd $NMSPRIME_DIR
-BRANCH=$(git branch | grep "*" | cut -c 3- | tr '/' '__')
+if ! test -e .git; then
+	BRANCH="default"
+else
+	BRANCH=$(git branch | grep "*" | cut -c 3- | tr '/' '__')
+fi
 
 TIMESTAMP="`date +%Y-%m-%dT%H-%M-%S`"
 PREFIX=$DB
