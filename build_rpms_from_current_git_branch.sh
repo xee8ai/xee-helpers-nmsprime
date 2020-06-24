@@ -36,6 +36,7 @@ mkdir -p "$DST"
 
 echo
 echo "Running “composer update”…"
+git pull && git submodule update --init --recursive
 composer update
 echo "Done…"
 
