@@ -7,18 +7,22 @@ set -euf -o pipefail
 
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
+HOST=$(python $SCRIPT_DIR/nmsprime_get_env.py host local)
 USER=$(python $SCRIPT_DIR/nmsprime_get_env.py user local)
 PASSWD=$(python $SCRIPT_DIR/nmsprime_get_env.py password local)
 DB=$(python $SCRIPT_DIR/nmsprime_get_env.py db local)
 
+CCC_HOST=$(python $SCRIPT_DIR/nmsprime_get_env.py host_ccc local)
 CCC_USER=$(python $SCRIPT_DIR/nmsprime_get_env.py user_ccc local)
 CCC_PASSWD=$(python $SCRIPT_DIR/nmsprime_get_env.py password_ccc local)
 CCC_DB=$(python $SCRIPT_DIR/nmsprime_get_env.py db_ccc local)
 
+CACTI_HOST=$(python $SCRIPT_DIR/nmsprime_get_env.py host_cacti local)
 CACTI_USER=$(python $SCRIPT_DIR/nmsprime_get_env.py user_cacti local)
 CACTI_PASSWD=$(python $SCRIPT_DIR/nmsprime_get_env.py password_cacti local)
 CACTI_DB=$(python $SCRIPT_DIR/nmsprime_get_env.py db_cacti local)
 
+ICINGA2_HOST=$(python $SCRIPT_DIR/nmsprime_get_env.py host_ccc local)
 ICINGA2_USER=$(python $SCRIPT_DIR/nmsprime_get_env.py user_icinga2 local)
 ICINGA2_PASSWD=$(python $SCRIPT_DIR/nmsprime_get_env.py password_icinga2 local)
 ICINGA2_DB=$(python $SCRIPT_DIR/nmsprime_get_env.py db_icinga2 local)
@@ -79,13 +83,13 @@ ICINGA2_DUMPFILE="$DUMPDIR"/"$TIMESTAMP"__"$BRANCH$DESC"__"$ICINGA2_PREFIX$SUFFI
 set -o pipefail
 
 echo "Dumping database $DB to $DUMPFILE…"
-mysqldump --opt --add-drop-database --user=$USER --password=$PASSWD --databases $DB | bzip2 > $DUMPFILE
+mysqldump --opt --add-drop-database --user=$USER --host=$HOST --password=$PASSWD --databases $DB | bzip2 > $DUMPFILE
 
 echo "Dumping database $CCC_DB to $CCC_DUMPFILE…"
-mysqldump --opt --add-drop-database --user=$CCC_USER --password=$CCC_PASSWD --databases $CCC_DB | bzip2 > $CCC_DUMPFILE
+mysqldump --opt --add-drop-database --user=$CCC_USER --host=$CCC_HOST --password=$CCC_PASSWD --databases $CCC_DB | bzip2 > $CCC_DUMPFILE
 
 echo "Dumping database $CACTI_DB to $CACTI_DUMPFILE…"
-mysqldump --opt --add-drop-database --user=$CACTI_USER --password=$CACTI_PASSWD --databases $CACTI_DB | bzip2 > $CACTI_DUMPFILE
+mysqldump --opt --add-drop-database --user=$CACTI_USER --host=$CACTI_HOST --password=$CACTI_PASSWD --databases $CACTI_DB | bzip2 > $CACTI_DUMPFILE
 
 # very huge (and slow)
 # echo "Dumping database $ICINGA2_DB to $ICINGA2_DUMPFILE…"
