@@ -57,7 +57,7 @@ def getValue(rawData):
     data = rawData.strip()
     data = data.replace('"', '')
     data = data.replace("'", "")
-    data = data.replace(",", "")
+    data = data.split(',')[0]
     return data
 
 
