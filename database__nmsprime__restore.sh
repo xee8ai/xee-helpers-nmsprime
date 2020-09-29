@@ -56,6 +56,30 @@ else
 
 fi
 
+# special syntax ($') to be able to echo linebreaks
+# functions can be listed by “SHOW FUNCTION STATUS”
+NMSPRIME_DB_COMMANDS=$'
+/* function needed by icingaweb2 to update netelements */
+DROP FUNCTION IF EXISTS getTopParentNetelementType;
+DELIMITER $$
+CREATE FUNCTION getTopParentNetelementType(start_id INT) RETURNS INT DETERMINISTIC
+BEGIN
+  DECLARE x INT;
+  DECLARE y INT;
+  SET x = start_id;
+  sloop:LOOP
+    SELECT parent_id INTO y FROM netelementtype WHERE id = x;
+    IF y IS NULL OR y = 0 THEN
+      LEAVE sloop;
+    END IF;
+    SET x = y;
+    ITERATE sloop;
+  END LOOP;
+  RETURN x;
+END $$
+DELIMITER ;
+'
+
 # restore the database
 if [[ "$1" == *$CCC_DB.sql* ]]; then
 	echo "Restoring database $CCC_DB…"
@@ -66,6 +90,10 @@ elif [[ "$1" == *$CACTI_DB.sql* ]]; then
 elif [[ "$1" == *$DB.sql* ]]; then
 	echo "Restoring database $DB…"
 	$CAT_CMD | mysql -u $USER -h $HOST -p$PASSWD -D $DB
+
+	# execute the SQL command(s); attention: “"” are needed in echo command to print line breaks!
+	echo "Executing SQL commands…"
+	echo "$NMSPRIME_DB_COMMANDS" | mysql -u $USER -h $HOST -p$PASSWD -D $DB
 else
 	echo "ERROR: filename $1 not matching *$CCC_DB.sql* or *$DB.sql*"
 	echo "Nothing restored!"
