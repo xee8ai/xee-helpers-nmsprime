@@ -35,8 +35,15 @@ DST="$DST/$RPMVERSION"
 mkdir -p "$DST"
 
 echo
-echo "Running “composer update”…"
-git pull && git submodule update --init --recursive
+echo "Pulling repo…"
+git pull
+
+echo
+echo "Updating submodules…"
+git submodule update --init --recursive
+
+echo
+echo "Updating composer"
 composer update
 echo "Done…"
 
