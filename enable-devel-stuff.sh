@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export COMPOSER_MEMORY_LIMIT=-1
+
 cd /var/www/nmsprime
 
 composer require barryvdh/laravel-debugbar --dev
