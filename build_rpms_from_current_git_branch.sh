@@ -11,6 +11,8 @@ SRC="/var/www/nmsprime"
 DST="/var/www/rpm/nmsprime"
 FPM="/usr/local/bin/fpm"
 
+INSTALL_CONFIG_FILE="Install/config.cfg"
+
 cd "$SRC"
 
 echo
@@ -44,13 +46,25 @@ git submodule update --init --recursive
 
 echo
 echo "Updating composer"
-composer update
+COMPOSER_MEMORY_LIMIT=-1 composer update
+echo "Done…"
+
+echo
+echo "Removing ioncube dependency…"
+sed -i "s/;php-ioncube-loader//" $INSTALL_CONFIG_FILE
+git diff $INSTALL_CONFIG_FILE
 echo "Done…"
 
 echo
 echo "Creating RPMs…"
 php Install/install.php "$RPMVERSION" . "$DST"
 echo "Done…"
+
+echo
+echo "Restoring original install config…"
+git checkout -- $INSTALL_CONFIG_FILE
+echo "Done…"
+
 echo "RPMs went to $DST:"
 ls -l "$DST"
 echo
