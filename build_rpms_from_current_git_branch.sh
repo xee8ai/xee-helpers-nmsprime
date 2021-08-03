@@ -9,10 +9,14 @@
 
 SRC="/var/www/nmsprime"
 DST="/var/www/rpm/nmsprime"
+RPMBUILD="/var/www/repos/rpmbuild"
 FPM="/usr/local/bin/fpm"
 
 INSTALL_CONFIG_FILE="Install/config.cfg"
 
+
+################################################################################
+# Getting metadata and asking for version to build
 cd "$SRC"
 
 echo
@@ -35,6 +39,20 @@ read -p "Which RPM version you want to build (e.g. 2.4.1)? " RPMVERSION
 
 DST="$DST/$RPMVERSION"
 mkdir -p "$DST"
+
+
+################################################################################
+# build the rpmbuild package (dependency of nmsprime)
+echo
+echo "Creating rpmbuild package"
+cd "$RPMBUILD/SPECS"
+git pull
+sed -i 's/^Version: .*/Version: '$RPMVERSION'/g' $RPMBUILD/SPECS/nmsprime-repos.spec
+rpmbuild -ba nmsprime-repos.spec
+
+
+################################################################################
+cd "$SRC"
 
 echo
 echo "Pulling repo…"
@@ -65,6 +83,11 @@ echo "Restoring original install config…"
 git checkout -- $INSTALL_CONFIG_FILE
 echo "Done…"
 
+echo
+echo "Copying rpmbuild package"
+cp /root/rpmbuild/RPMS/noarch/*$RPMVERSION* $DST
+
+echo
 echo "RPMs went to $DST:"
 ls -l "$DST"
 echo
