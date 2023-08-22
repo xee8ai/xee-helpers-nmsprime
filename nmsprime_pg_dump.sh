@@ -37,7 +37,7 @@ if [ "$#" -gt 1 ]; then
 fi
 
 if ! test -e $DUMPDIR; then
-	mkdir $DUMPDIR
+	mkdir -p $DUMPDIR
 fi
 
 # get the branch name to add it to dumpfile name
@@ -63,10 +63,10 @@ CCC_DUMPFILE="$DUMPDIR"/"$TIMESTAMP"__"$BRANCH$DESC"__"$CCC_PREFIX$SUFFIX"
 # One can simply extract the file (using bunzip) and restore the non-compressed file using nmsprime_pg_restore.sh as well)
 
 echo "Dumping database $DB to $DUMPFILE…"
-$DUMPCMD nmsprime -n nmsprime --clean | bzip2 > $DUMPFILE
+$DUMPCMD nmsprime -n nmsprime --clean --create --if-exists | bzip2 > $DUMPFILE
 
 echo "Dumping database $CCC_DB to $CCC_DUMPFILE…"
-$DUMPCMD nmsprime_ccc -n nmsprime_ccc --clean | bzip2 > $CCC_DUMPFILE
+$DUMPCMD nmsprime_ccc -n nmsprime_ccc --clean --create --if-exists | bzip2 > $CCC_DUMPFILE
 
 
 exit 0
