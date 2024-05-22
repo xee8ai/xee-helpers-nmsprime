@@ -10,6 +10,7 @@ NMSPRIME_DIR="/var/www/nmsprime"
 
 DB="nmsprime"
 CCC_DB="nmsprime_ccc"
+NETBOX_DB="netbox"
 
 echo
 
@@ -51,11 +52,13 @@ fi
 TIMESTAMP="`date +%Y-%m-%dT%H-%M-%S`"
 PREFIX=$DB
 CCC_PREFIX=$CCC_DB
+NETBOX_PREFIX=$NETBOX_DB
 
 SUFFIX=".pg.sql.bz2"
 
 DUMPFILE="$DUMPDIR"/"$TIMESTAMP"__"$BRANCH$DESC"__"$PREFIX$SUFFIX"
 CCC_DUMPFILE="$DUMPDIR"/"$TIMESTAMP"__"$BRANCH$DESC"__"$CCC_PREFIX$SUFFIX"
+NETBOX_DUMPFILE="$DUMPDIR"/"$TIMESTAMP"__"$NETBOX_PREFIX$SUFFIX"
 
 # hint: We are doing plain dumps to be able to read and even edit them later on
 # for compression we use bzip2 (so we can use bzcat and bzless to work with compressed files)
@@ -63,10 +66,13 @@ CCC_DUMPFILE="$DUMPDIR"/"$TIMESTAMP"__"$BRANCH$DESC"__"$CCC_PREFIX$SUFFIX"
 # One can simply extract the file (using bunzip) and restore the non-compressed file using nmsprime_pg_restore.sh as well)
 
 echo "Dumping database $DB to $DUMPFILE…"
-$DUMPCMD nmsprime -n nmsprime --clean --create --if-exists | bzip2 > $DUMPFILE
+$DUMPCMD nmsprime --clean --create --if-exists | bzip2 > $DUMPFILE
 
 echo "Dumping database $CCC_DB to $CCC_DUMPFILE…"
-$DUMPCMD nmsprime_ccc -n nmsprime_ccc --clean --create --if-exists | bzip2 > $CCC_DUMPFILE
+$DUMPCMD nmsprime_ccc --clean --create --if-exists | bzip2 > $CCC_DUMPFILE
+
+echo "Dumping database $NETBOX_DB to $NETBOX_DUMPFILE…"
+$DUMPCMD netbox --clean --create --if-exists | bzip2 > $NETBOX_DUMPFILE
 
 
 exit 0
