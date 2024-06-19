@@ -97,6 +97,10 @@ case "$1" in
         fi
 
         $CAT_CMD | sudo -u postgres $PSQL
+
+        sudo -u postgres $PSQL -c "
+            SET search_path TO nmsprime,public;
+        "
         ;;
     *)
         usage
