@@ -2,13 +2,13 @@
 
 # Helper to clean environment if there are strange problems
 # like ExtendedValidator not found or wrongly built URLs like https://localhost/admin/Contract/create
-# if that doesn't help try deleting bootstrap/cache/*
 
 cd /var/www/nmsprime
 
 export COMPOSER_MEMORY_LIMIT=-1
 export COMPOSER_ALLOW_SUPERUSER=1
 
+rm -rf bootstrap/cache/*
 mkdir -p /var/www/nmsprime/storage/framework/cache
 mkdir -p /var/www/nmsprime/storage/framework/sessions
 mkdir -p /var/www/nmsprime/storage/framework/views
@@ -18,6 +18,7 @@ php artisan migrate
 php artisan module:migrate
 php artisan module:publish
 php artisan optimize
+php artisan queue:restart
 
 systemctl restart supervisord httpd
 systemctl restart telegraf
