@@ -91,8 +91,10 @@ case "$1" in
             CAT_CMD="bzcat $2"
         elif [[ "$2" == *.pg.sql ]]; then
             CAT_CMD="cat $2"
+        elif [[ "$2" == *.psql ]]; then
+            CAT_CMD="cat $2"
         else
-            echo "ERROR: Filename $1 has to end with “.pg.sql” or with “.pg.sql.bz2”"
+            echo "ERROR: Filename $1 has to end with “.psql” or with “.pg.sql” or with “.pg.sql.bz2”"
             exit 1
         fi
 
