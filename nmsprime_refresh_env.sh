@@ -15,8 +15,8 @@ mkdir -p /var/www/nmsprime/storage/framework/views
 
 composer update
 php artisan migrate
-php artisan module:migrate
-php artisan module:publish
+php artisan module:migrate -a
+php artisan module:publish -a
 php artisan optimize
 php artisan queue:restart
 
