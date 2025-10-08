@@ -3,7 +3,8 @@
 # exit on first error
 set -euf -o pipefail
 
-DUMPCMD="sudo -u postgres /usr/pgsql-13/bin/pg_dump"
+# DUMPCMD="sudo -u postgres /usr/pgsql-13/bin/pg_dump"
+DUMPCMD="sudo -u postgres /usr/bin/pg_dump"
 
 DUMPDIR="/root/db_dumps/manually"
 NMSPRIME_DIR="/var/www/nmsprime"
