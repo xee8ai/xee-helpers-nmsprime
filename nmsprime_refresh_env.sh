@@ -25,4 +25,6 @@ systemctl restart telegraf
 
 chown -R apache /var/www/nmsprime/storage/framework
 
+npx -y update-browserslist-db@latest
+
 rm -rf public/js/ && rm -rf public/css/ && rm -f public/mix-manifest.json && npm i && npm run dev
