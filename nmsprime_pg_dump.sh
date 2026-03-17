@@ -67,6 +67,12 @@ NETBOX_DUMPFILE="$DUMPDIR"/"$TIMESTAMP"__"$NETBOX_PREFIX$SUFFIX"
 # One can simply extract the file (using bunzip) and restore the non-compressed file using nmsprime_pg_restore.sh as well)
 
 echo "Dumping database $DB to $DUMPFILE…"
+echo "INFO: The warnings like"
+echo "  pg_dump: warning: there are circular foreign-key constraints on this table:"
+echo "and"
+echo "  pg_dump: detail: hypertable"
+echo "can be ignored – we take care of this in the restore process."
+echo
 $DUMPCMD nmsprime --clean --create --if-exists | bzip2 > $DUMPFILE
 
 echo "Dumping database $CCC_DB to $CCC_DUMPFILE…"
