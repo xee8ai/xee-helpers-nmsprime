@@ -24,6 +24,7 @@ systemctl restart supervisord httpd
 systemctl restart telegraf
 
 chown -R apache /var/www/nmsprime/storage/framework
+chown -R apache /var/www/nmsprime/storage/app
 
 npx -y update-browserslist-db@latest
 
