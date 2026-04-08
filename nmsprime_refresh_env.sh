@@ -19,6 +19,7 @@ php artisan migrate --force
 php artisan module:migrate --all
 php artisan module:publish --all
 php artisan optimize
+composer dump-autoload
 php artisan queue:restart
 
 systemctl restart supervisord httpd
