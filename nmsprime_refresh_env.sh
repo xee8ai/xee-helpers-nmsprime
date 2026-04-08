@@ -13,10 +13,11 @@ mkdir -p /var/www/nmsprime/storage/framework/cache
 mkdir -p /var/www/nmsprime/storage/framework/sessions
 mkdir -p /var/www/nmsprime/storage/framework/views
 
-composer update
-php artisan migrate
-php artisan module:migrate -a
-php artisan module:publish -a
+# composer update
+composer install
+php artisan migrate --force
+php artisan module:migrate --all
+php artisan module:publish --all
 php artisan optimize
 php artisan queue:restart
 
