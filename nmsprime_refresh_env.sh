@@ -32,5 +32,5 @@ npx -y update-browserslist-db@latest
 
 rm -rf public/js/ && rm -rf public/css/ && rm -f public/mix-manifest.json && npm i && npm run dev
 
-composer require laravel/boost --dev
-php artisan boost:update || php artisan boost:install
+# composer require laravel/boost --dev
+# php artisan boost:update || php artisan boost:install
